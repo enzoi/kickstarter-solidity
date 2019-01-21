@@ -25,10 +25,6 @@ class CampaignIndex extends React.Component {
     render() {
         return (
             <Layout>
-                <link
-                    rel="stylesheet"
-                    href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
-                />
                 <h3>Open Campaigns</h3>
 
                 <Button
@@ -40,7 +36,6 @@ class CampaignIndex extends React.Component {
 
                 {this.renderCampaigns()}
             </Layout>
-            
         );
     }
 }
