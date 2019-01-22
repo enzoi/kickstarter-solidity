@@ -2,14 +2,18 @@ import React from 'react';
 import { Table, Button } from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
 import Campaign from '../ethereum/campaign';
+import { Router } from '../routes';
 
 class RequestRow extends React.Component {
     onApprove = async event => {
         const campaign = Campaign(this.props.address);
         const accounts = await web3.eth.getAccounts();
+        console.log('id', this.props.id);
         await campaign.methods.approveRequest(this.props.id).send({
             from: accounts[0]
         });
+
+        Router.replaceRoute(`/campaigns/${this.props.address}/requests`);
     }
 
     onFinalize = async event => {
@@ -18,14 +22,19 @@ class RequestRow extends React.Component {
         await campaign.methods.finalizeRequest(this.props.id).send({
             from: accounts[0]
         });
+
+        Router.replaceRoute(`/campaigns/${this.props.address}/requests`);
     }
 
     render() {
         const { Row, Cell } = Table;
         const { id, request, approversCount } = this.props;
+        const readyToFinalize = request.approvalCount > approversCount / 2;
 
         return (
-            <Row disabled={request.complete}>
+            <Row 
+                disabled={request.complete} 
+                positive={readyToFinalize && !request.complete}>
                 <Cell>{id}</Cell>
                 <Cell>{request.description}</Cell>
                 <Cell>{web3.utils.fromWei(request.value, 'ether')}</Cell>
