@@ -18,6 +18,24 @@ class RequestNew extends React.Component {
         return { address };
     }
 
+    onSubmit = async event => {
+        event.preventDefault();
+
+        const campaign = Campaign(this.props.address);
+        const { description, value, recipient } = this.state;
+
+        try {
+            const accounts = web3.eth.getAccounts();
+            await campaign.methods.createRequest(
+                description,
+                web3.utils.toWei(value, 'ether'),
+                recipient
+            );
+        } catch (err) {
+
+        }
+    }
+
     render() {
         return (
             <Layout>
